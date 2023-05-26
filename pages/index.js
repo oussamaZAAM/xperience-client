@@ -6,10 +6,14 @@ import RatingLine from "@/components/sidebar/RatingLine";
 import SelectMenu from "@/components/sidebar/SelectMenu";
 import VersionLine from "@/components/sidebar/VersionLine";
 
+import { FaDownload } from "react-icons/fa";
 import { FiSearch } from "react-icons/fi";
-import { MdArrowDropDown } from "react-icons/md";
+import { MdArrowDropDown, MdRssFeed } from "react-icons/md";
+import { TbBellFilled, TbBraces } from "react-icons/tb";
+
 import Select from "react-select";
 import { colourOptions } from "../data";
+import Review from "@/components/Review";
 
 const index = () => {
   const [isClearable, setIsClearable] = useState(true);
@@ -20,7 +24,7 @@ const index = () => {
 
   return (
     <div className="mx-auto">
-      <div className="flex justify-between items-stretch px-2 py-4 mt-2 mb-4">
+      <div className="bg-white fixed top-0 left-0 w-screen z-50 flex justify-between items-stretch px-2 py-4 border-b-2 border-zinc-300">
         <div className="flex flex-col justify-center items-start mx-16 gap-2">
           <p className="">select products</p>
           <Select
@@ -47,10 +51,9 @@ const index = () => {
           </div>
         </div>
       </div>
-      <hr />
-      <div className="flex items-center">
+      <div className="mt-24 flex items-start">
         {/* Side bar Menu */}
-        <div style={{overflowY: "scroll", maxHeight: "600px"}} className="flex-1 w-full flex flex-col items-center justify-start p-4 gap-4">
+        <div className="fixed w-3/12 flex-1 flex flex-col items-center justify-start p-4 gap-4 border-r-2 border-zinc-300">
           <div className="flex flex-col items-stretch justify-center gap-4 w-11/12">
             {/* Search bar */}
             <div className="flex items-center justify-start rounded-md border-2 border-zinc-300 py-2 px-3 textinput">
@@ -98,7 +101,14 @@ const index = () => {
               </div>
             </div>
             {/* Filter by Country  */}
-            <div className="flex flex-col justify-start items-start gap-2 w-full">
+            <div
+              style={{
+                overflowY: "scroll",
+                overflowX: "hidden",
+                maxHeight: "100px",
+              }}
+              className="flex flex-col justify-start items-start gap-2 w-full"
+            >
               <div className="flex items-center justify-center gap-2 cursor-pointer">
                 <MdArrowDropDown size={20} />
                 <p className="font-medium text-sm">Filter by Country</p>
@@ -114,7 +124,36 @@ const index = () => {
             </div>
           </div>
         </div>
-        <div className="max-h-96 flex-2 w-9/12 h-screen bg-pink-200">s</div>
+        <div
+          style={{ overflowY: "scroll", overflowX: "hidden" }}
+          className="absolute right-0 flex-2 w-9/12 h-screen"
+        >
+          <div className="my-8 mx-3 flex flex-col justify-center items-center">
+            <div className="flex justify-between items-center w-full mr-4">
+              <p className="text-md font-semibold">
+                Viewing 1-10 of 157 Reviews
+              </p>
+              <div className="flex justify-center items-center">
+                {/* Create Alert */}
+                <div className="flex justify-center items-center border-2 border-zinc-300 rounded-md py-1 px-3 gap-1">
+                  <TbBellFilled size={18} />
+                  <p className="text-sm font-semibold">Create Alert</p>
+                  <MdArrowDropDown size={20} />
+                </div>
+
+                {/* Icons */}
+                <div className="flex justify-center items-center border-2 border-zinc-300 rounded-md py-1 px-3 gap-1">
+                  <MdRssFeed size={18} />
+                  <TbBraces size={18} />
+                  <FaDownload size={18} />
+                </div>
+              </div>
+            </div>
+            <div className="flex flex-col justify-start items-stretch">
+              <Review />
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
