@@ -53,8 +53,8 @@ const index = () => {
       </div>
       <div className="mt-24 flex items-start">
         {/* Side bar Menu */}
-        <div className="fixed w-3/12 flex-1 flex flex-col items-center justify-start p-4 gap-4 border-r-2 border-zinc-300">
-          <div className="flex flex-col items-stretch justify-center gap-4 w-11/12">
+        <div className="fixed w-3/12 flex-1 flex flex-col items-center justify-start p-3 gap-2 my-2 border-r-2 border-zinc-300">
+          <div className="flex flex-col items-stretch justify-center gap-2 w-11/12">
             {/* Search bar */}
             <div className="flex items-center justify-start rounded-md border-2 border-zinc-300 py-2 px-3 textinput">
               <FiSearch size={24} />
@@ -68,7 +68,7 @@ const index = () => {
             <SelectMenu text="all time" />
           </div>
 
-          <div className="flex flex-col items-start justify-center w-full ml-4 my-4 gap-6">
+          <div className="flex flex-col items-start justify-center w-full ml-4 my-4 gap-5">
             {/* Filter by Rating  */}
             <div className="flex flex-col justify-start items-start gap-2 w-full">
               <div className="flex items-center justify-center gap-2 cursor-pointer">
@@ -77,7 +77,7 @@ const index = () => {
               </div>
 
               {/* Rating Section */}
-              <div className="flex flex-col justify-center items-stretch w-10/12 ml-4 gap-1.5">
+              <div className="flex flex-col justify-center items-stretch w-10/12 ml-4 gap-1">
                 <RatingLine rating={5} raters={30} totalRaters={150} />
                 <RatingLine rating={4} raters={20} totalRaters={150} />
                 <RatingLine rating={3} raters={90} totalRaters={150} />
@@ -93,7 +93,15 @@ const index = () => {
                 <p className="font-medium text-sm">Filter by Version</p>
               </div>
 
-              <div className="flex flex-col justify-center items-stretch w-10/12 ml-4 gap-1.5">
+              <div
+                style={{
+                  overflowY: "scroll",
+                  overflowX: "hidden",
+                  maxHeight: "100px",
+                  paddingRight: "10px"
+                }}
+                className="flex flex-col justify-center items-stretch w-10/12 ml-4 gap-1.5"
+              >
                 <VersionLine version={"1.12.0"} occurence={46} />
                 <VersionLine version={"1.2.0"} occurence={19} />
                 <VersionLine version={"1.1.4"} occurence={6} />
@@ -101,20 +109,21 @@ const index = () => {
               </div>
             </div>
             {/* Filter by Country  */}
-            <div
-              style={{
-                overflowY: "scroll",
-                overflowX: "hidden",
-                maxHeight: "100px",
-              }}
-              className="flex flex-col justify-start items-start gap-2 w-full"
-            >
+            <div className="flex flex-col justify-start items-start gap-2 w-full">
               <div className="flex items-center justify-center gap-2 cursor-pointer">
                 <MdArrowDropDown size={20} />
                 <p className="font-medium text-sm">Filter by Country</p>
               </div>
 
-              <div className="flex flex-col justify-center items-stretch w-10/12 ml-4 gap-2">
+              <div
+                style={{
+                  overflowY: "scroll",
+                  overflowX: "hidden",
+                  maxHeight: "125px",
+                  paddingRight: "10px"
+                }}
+                className="flex flex-col justify-start items-stretch w-10/12 ml-4 gap-2 h-full"
+              >
                 <CountryLine country={"Morocco"} occurence={78} />
                 <CountryLine country={"Morocco"} occurence={78} />
                 <CountryLine country={"Morocco"} occurence={78} />
@@ -129,11 +138,11 @@ const index = () => {
           className="absolute right-0 flex-2 w-9/12 h-screen"
         >
           <div className="my-8 mx-3 flex flex-col justify-center items-center">
-            <div className="flex justify-between items-center w-full mr-4 mb-6">
+            <div className="flex justify-between items-center w-full mb-6">
               <p className="text-md font-semibold">
                 Viewing 1-10 of 157 Reviews
               </p>
-              <div className="flex justify-center items-center gap-4">
+              <div className="flex justify-center items-center gap-4 mr-4">
                 {/* Create Alert */}
                 <div className="flex justify-center items-center border-2 border-zinc-300 rounded-md py-1 px-3 gap-2">
                   <TbBellFilled size={18} />

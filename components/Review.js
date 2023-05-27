@@ -18,7 +18,7 @@ const Review = () => {
       .catch((error) => console.log(error));
   }, []);
   return (
-    <div className="flex flex-col justify-start items-center drop-shadow-xl rounded-lg bg-white w-full p-5 gap-6">
+    <div className="flex flex-col justify-start items-center shadow-xl rounded-lg bg-white w-full p-5 gap-6">
       {/* Review Title + Rating  */}
       <div className="flex justify-between items-center w-full">
         <div className="flex justify-end items-center gap-6">

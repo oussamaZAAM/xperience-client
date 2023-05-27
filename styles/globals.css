@@ -3,12 +3,12 @@
 @tailwind utilities;
 
 .textinput:focus-within {
-  border: 1px solid black;
+  border: 2px solid black;
   /* Add other styles as needed */
 }
 
 ::-webkit-scrollbar {
-  width: 10px;
+  width: 4px;
 }
 
 ::-webkit-scrollbar-thumb {
