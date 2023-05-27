@@ -13,6 +13,8 @@ import Review from "@/components/Review";
 import { useState } from "react";
 import { HiPlusSm } from "react-icons/hi";
 
+import { ApplicationsData } from "../public/review";
+
 const index = () => {
   const [product, setProduct] = useState("My App +2");
   const productsList = ["My App +1", "My App +2", "My App +3", "My App +4"];
@@ -220,8 +222,11 @@ const index = () => {
               </div>
             </div>
             <div className="flex flex-col justify-start items-stretch w-full gap-4">
-              <Review />
-              <Review />
+              {ApplicationsData.map((review) => {
+                return (
+                  <Review review={review} />
+                )
+              })}
             </div>
           </div>
         </div>

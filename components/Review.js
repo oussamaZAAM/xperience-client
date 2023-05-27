@@ -7,13 +7,24 @@ import { MdKeyboardArrowDown } from "react-icons/md";
 
 import Stars from "./Stars";
 import { fetchCountry } from "./fetchCountry";
+import { calculateTimePassed } from "./generalMethods";
 
-const country = "Japan";
-
-const Review = () => {
+const Review = ({ review }) => {
+  const {
+    id,
+    appID,
+    appStoreName,
+    reviewDate,
+    rating,
+    version,
+    countryName,
+    reviewHeading,
+    reviewText,
+    reviewUserName,
+  } = review;
   const [flag, setFlag] = useState(missing_flag);
   useEffect(() => {
-    fetchCountry(country)
+    fetchCountry(review.countryName)
       .then((flag) => setFlag(flag))
       .catch((error) => console.log(error));
   }, []);
@@ -30,10 +41,10 @@ const Review = () => {
             style={{ backgroundColor: COLORS.gray }}
             className="flex justify-center items-center h-8 rounded px-3"
           >
-            <p className="text-sm font-medium">iOS</p>
+            <p className="text-sm font-medium">{appStoreName}</p>
           </div>
-          <p className="text-lg font-semibold">I use it every day!</p>
-          <Stars rating={5} size="big" />
+          <p className="text-lg font-semibold">{reviewHeading}</p>
+          <Stars rating={rating} size="big" />
         </div>
         <div className="flex justify-center items-center border-2 border-black rounded py-0.5 px-2.5">
           <p className="text-sm font-bold">TRANSLATED</p>
@@ -41,23 +52,19 @@ const Review = () => {
       </div>
       {/* Review Body */}
 
-      <p className="text.sm font-regular">
-        I've only been using it for a short time, but I really like it so far!
-        It's not that it's 100% perfect, there are things that could be
-        improved. But it's pretty close to perfect.
-      </p>
+      <p className="text.sm font-regular text-start w-full">{reviewText}</p>
 
       {/* Review Infos + Interactions */}
       <div className="flex justify-between itens-center w-full">
         <div className="flex justify-center items-center gap-4">
           {/* Author */}
-          <p className="font-semibold text-sm">By Misa</p>
+          <p className="font-semibold text-sm">By {reviewUserName}</p>
 
           {/* Timestamp */}
-          <p className="font-semibold text-sm">1 hour ago</p>
+          <p className="font-semibold text-sm">{calculateTimePassed(reviewDate)}</p>
 
           {/* Version */}
-          <p className="font-semibold text-sm">v1.12.0</p>
+          <p className="font-semibold text-sm">{version}</p>
 
           {/* Country */}
           <div className="flex justify-start items-center gap-2">
@@ -66,9 +73,9 @@ const Review = () => {
               src={flag}
               height={175}
               width={175}
-              alt={"Country: " + country}
+              alt={"Country: " + countryName}
             />
-            <p className="font-semibold text-left text-sm">{country}</p>
+            <p className="font-semibold text-left text-sm">{countryName}</p>
           </div>
         </div>
 
