@@ -32,6 +32,9 @@ const index = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchedData, setSearchedData] = useState(ApplicationsData);
 
+  // Common Data (between searched data and filtered data)
+  const commonData = filteredData.filter(review => searchedData.includes(review));
+
   const handleInputChange = (event) => {
     const searchTerm = event.target.value;
     setSearchTerm(searchTerm);
@@ -74,12 +77,11 @@ const index = () => {
   const [currentPage, setCurrentPage] = useState(1);
 
   // Calculate the total number of pages
-  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+  const totalPages = Math.ceil(commonData.length / itemsPerPage);
 
   // Slice the data for the current page
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  const commonData = filteredData.filter(review => searchedData.includes(review));
   const paginatedData = commonData.slice(startIndex, endIndex);
 
   // Update the current page
@@ -132,25 +134,25 @@ const index = () => {
 
   // Rating Distribution for Rating filter
   const ratingDistribution = [0, 0, 0, 0, 0];
-  ratingDistribution[0] = filteredData.filter(
+  ratingDistribution[0] = commonData.filter(
     (review) => review.rating === "1"
   ).length;
-  ratingDistribution[1] = filteredData.filter(
+  ratingDistribution[1] = commonData.filter(
     (review) => review.rating === "2"
   ).length;
-  ratingDistribution[2] = filteredData.filter(
+  ratingDistribution[2] = commonData.filter(
     (review) => review.rating === "3"
   ).length;
-  ratingDistribution[3] = filteredData.filter(
+  ratingDistribution[3] = commonData.filter(
     (review) => review.rating === "4"
   ).length;
-  ratingDistribution[4] = filteredData.filter(
+  ratingDistribution[4] = commonData.filter(
     (review) => review.rating === "5"
   ).length;
 
   // Version Distribution for Version filter
   const versionDistribution = {};
-  filteredData.forEach((review) => {
+  commonData.forEach((review) => {
     if (Object.keys(versionDistribution).includes(review.version)) {
       versionDistribution[review.version] =
         versionDistribution[review.version] + 1;
@@ -161,7 +163,7 @@ const index = () => {
 
   // Country Distribution for Country filter
   const countryDistribution = {};
-  filteredData.forEach((review) => {
+  commonData.forEach((review) => {
     if (Object.keys(countryDistribution).includes(review.countryName)) {
       countryDistribution[review.countryName] =
         countryDistribution[review.countryName] + 1;
@@ -285,7 +287,10 @@ const index = () => {
                             ? "bg-zinc-300"
                             : "hover:bg-zinc-300")
                         }
-                        onClick={() => filterByArgument("rating", rating)}
+                        onClick={() => {
+                          filterByArgument("rating", rating);
+                          handlePageChange(1);
+                        }}
                       >
                         <RatingLine
                           rating={rating}
@@ -338,7 +343,10 @@ const index = () => {
                           ? "bg-zinc-300"
                           : "hover:bg-zinc-300")
                       }
-                      onClick={() => filterByArgument("version", version)}
+                      onClick={() => {
+                        filterByArgument("version", version);
+                        handlePageChange(1);
+                      }}
                     >
                       <VersionLine
                         version={version}
@@ -388,7 +396,10 @@ const index = () => {
                           ? "bg-zinc-300"
                           : "hover:bg-zinc-300")
                       }
-                      onClick={() => filterByArgument("countryName", country)}
+                      onClick={() => {
+                        filterByArgument("countryName", country);
+                        handlePageChange(1);
+                      }}
                     >
                       <CountryLine
                         country={country}
