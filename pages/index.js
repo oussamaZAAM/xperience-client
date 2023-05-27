@@ -11,23 +11,47 @@ import { MdArrowDropDown, MdRssFeed } from "react-icons/md";
 import { TbBellFilled, TbBraces } from "react-icons/tb";
 
 import Review from "@/components/Review";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { HiPlusSm } from "react-icons/hi";
 
 import { ApplicationsData } from "../public/review";
+import { stringToDate } from "@/components/generalMethods";
 const itemsPerPage = 10;
 const maxPaginationNumbers = 5;
 
 const index = () => {
-  const [filteredData, setFilteredData] = useState(ApplicationsData);
+  const [filteredData, setFilteredData] = useState(
+    ApplicationsData.sort(
+      (a, b) => stringToDate(b.reviewDate) - stringToDate(a.reviewDate) // Set it to "Newest First" at first
+    )
+  );
   const [isFilterApplied, setIsFilterApplied] = useState(false);
   const [filtersApplied, setFiltersApplied] = useState([]);
+
+  // Search bar
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchedData, setSearchedData] = useState(ApplicationsData);
+
+  const handleInputChange = (event) => {
+    const searchTerm = event.target.value;
+    setSearchTerm(searchTerm);
+    setSearchedData(prev => {
+      const newFilteredData = ApplicationsData.filter(
+        (review) =>
+          review.reviewHeading
+            .toLowerCase()
+            .includes(searchTerm.toLowerCase()) ||
+          review.reviewText.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      return newFilteredData;
+    });
+  };
 
   const [product, setProduct] = useState("My App +2");
   const productsList = ["My App +1", "My App +2", "My App +3", "My App +4"];
 
   const [sortingBy, setSortingBy] = useState("Newest First");
-  const sortingBysList = ["Newest First", "Older First"];
+  const sortingBysList = ["Newest First", "Oldest First"];
 
   const [translation, setTranslation] = useState("English");
   const translationList = ["English", "French", "Arabic", "Japanese"];
@@ -55,7 +79,8 @@ const index = () => {
   // Slice the data for the current page
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  const paginatedData = filteredData.slice(startIndex, endIndex);
+  const commonData = filteredData.filter(review => searchedData.includes(review));
+  const paginatedData = commonData.slice(startIndex, endIndex);
 
   // Update the current page
   const handlePageChange = (pageNumber) => {
@@ -154,6 +179,23 @@ const index = () => {
     setFiltersApplied([...filtersApplied, argument]);
   };
 
+  // Sorting Algorithms
+  useEffect(() => {
+    if (sortingBy == "Newest First") {
+      setFilteredData((prev) => {
+        return prev.sort(
+          (a, b) => stringToDate(b.reviewDate) - stringToDate(a.reviewDate)
+        );
+      });
+    } else if (sortingBy == "Oldest First") {
+      setFilteredData((prev) => {
+        return prev.sort(
+          (a, b) => stringToDate(a.reviewDate) - stringToDate(b.reviewDate)
+        );
+      });
+    }
+  }, [sortingBy]);
+
   return (
     <div className="mx-auto">
       <div className="bg-white fixed top-0 left-0 w-screen z-50 flex justify-between items-stretch px-2 py-4 border-b-2 border-zinc-300">
@@ -193,6 +235,8 @@ const index = () => {
               <FiSearch size={24} />
               <input
                 type="text"
+                value={searchTerm}
+                onChange={handleInputChange}
                 className="indent-2 h-max w-full focus:outline-none"
                 placeholder="search"
               />
@@ -374,8 +418,9 @@ const index = () => {
           <div className="my-8 mx-3 flex flex-col justify-center items-center">
             <div className="flex justify-between items-center w-full mb-6">
               <p className="text-md font-semibold">
-                Viewing {startIndex + 1}-{endIndex} of {filteredData.length}{" "}
-                Reviews
+                Viewing {startIndex + 1}-
+                {filteredData.length >= 10 ? endIndex : filteredData.length} of{" "}
+                {filteredData.length} Reviews
               </p>
               <div className="flex justify-center items-center gap-4 mr-4">
                 {/* Create Alert */}

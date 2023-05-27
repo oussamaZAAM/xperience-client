@@ -1,12 +1,16 @@
-export function calculateTimePassed(dateString) {
-  const currentDate = new Date();
-
-  const isoDateString = dateString.replace(
+export function stringToDate(string) {
+  const isoDateString = string.replace(
     /(\d{2}) (\w{3}) (\d{4})/,
     "$2 $1 $3"
   );
-
   const dateObject = new Date(isoDateString);
+  return dateObject;
+}
+
+export function calculateTimePassed(dateString) {
+  const currentDate = new Date();
+
+  const dateObject = stringToDate(dateString);
 
   const timeDiff = currentDate.getTime() - dateObject.getTime();
 
