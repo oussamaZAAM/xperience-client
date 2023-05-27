@@ -98,6 +98,35 @@ const index = () => {
 
     return paginationNumbers;
   };
+  // --------------------------------------------------------------------
+
+  // Rating Distribution for Rating filter
+  const ratingDistribution = [0, 0, 0, 0, 0];
+  ratingDistribution[0] = ApplicationsData.filter((review) => review.rating === '5').length;
+  ratingDistribution[1] = ApplicationsData.filter((review) => review.rating === '4').length;
+  ratingDistribution[2] = ApplicationsData.filter((review) => review.rating === '3').length;
+  ratingDistribution[3] = ApplicationsData.filter((review) => review.rating === '2').length;
+  ratingDistribution[4] = ApplicationsData.filter((review) => review.rating === '1').length;
+
+  // Version Distribution for Version filter
+  const versionDistribution = {};
+  ApplicationsData.forEach((review) => {
+    if (Object.keys(versionDistribution).includes(review.version)){
+      versionDistribution[review.version] = versionDistribution[review.version] + 1;
+    } else {
+      versionDistribution[review.version] = 1;
+    }
+  });
+
+  // Country Distribution for Country filter
+  const countryDistribution = {};
+  ApplicationsData.forEach((review) => {
+    if (Object.keys(countryDistribution).includes(review.countryName)){
+      countryDistribution[review.countryName] = countryDistribution[review.countryName] + 1;
+    } else {
+      countryDistribution[review.countryName] = 1;
+    }
+  });
 
   return (
     <div className="mx-auto">
@@ -175,11 +204,11 @@ const index = () => {
                   (openRatingFilter ? "flex" : "hidden")
                 }
               >
-                <RatingLine rating={5} raters={30} totalRaters={150} />
-                <RatingLine rating={4} raters={20} totalRaters={150} />
-                <RatingLine rating={3} raters={90} totalRaters={150} />
-                <RatingLine rating={2} raters={10} totalRaters={150} />
-                <RatingLine rating={1} raters={150} totalRaters={150} />
+                <RatingLine rating={5} raters={ratingDistribution[4]} totalRaters={ApplicationsData.length} />
+                <RatingLine rating={4} raters={ratingDistribution[3]} totalRaters={ApplicationsData.length} />
+                <RatingLine rating={3} raters={ratingDistribution[2]} totalRaters={ApplicationsData.length} />
+                <RatingLine rating={2} raters={ratingDistribution[1]} totalRaters={ApplicationsData.length} />
+                <RatingLine rating={1} raters={ratingDistribution[0]} totalRaters={ApplicationsData.length} />
               </div>
             </div>
 
@@ -208,14 +237,15 @@ const index = () => {
                   paddingRight: "10px",
                 }}
                 className={
-                  "flex-col justify-center items-stretch w-10/12 ml-4 gap-1.5 " +
+                  "flex-col justify-start items-stretch w-10/12 ml-4 gap-1.5 " +
                   (openVersionFilter ? "flex" : "hidden")
                 }
               >
-                <VersionLine version={"1.12.0"} occurence={46} />
-                <VersionLine version={"1.2.0"} occurence={19} />
-                <VersionLine version={"1.1.4"} occurence={6} />
-                <VersionLine version={"1.0.0"} occurence={106} />
+                {Object.keys(versionDistribution).map((version) => {
+                  return (
+                    <VersionLine version={version} occurence={versionDistribution[version]} />
+                  )
+                })}
               </div>
             </div>
             {/* Filter by Country  */}
@@ -247,11 +277,11 @@ const index = () => {
                   (openCountryFilter ? "flex" : "hidden")
                 }
               >
-                <CountryLine country={"Morocco"} occurence={78} />
-                <CountryLine country={"Morocco"} occurence={78} />
-                <CountryLine country={"Morocco"} occurence={78} />
-                <CountryLine country={"Morocco"} occurence={78} />
-                <CountryLine country={"Morocco"} occurence={78} />
+                {Object.keys(countryDistribution).map((country) => {
+                  return (
+                    <CountryLine country={country} occurence={countryDistribution[country]} />
+                  )
+                })}
               </div>
             </div>
           </div>
@@ -279,11 +309,15 @@ const index = () => {
                 </div>
               </div>
             </div>
+
+            {/* Reviews */}
             <div className="flex flex-col justify-start items-stretch w-full gap-4">
               {paginatedData.map((review) => {
                 return <Review review={review} />;
               })}
             </div>
+
+            {/* Pagination */}
             <div className="flex justify-center items-center my-2">
               {generatePaginationNumbers().map((pageNumber, index) => (
                 <button
