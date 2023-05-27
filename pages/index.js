@@ -320,14 +320,16 @@ const index = () => {
             {/* Pagination */}
             <div className="flex justify-center items-center my-2">
               {generatePaginationNumbers().map((pageNumber, index) => (
-                <button
-                  className={"text-md mx-2 "+(pageNumber === currentPage ? "font-bold" : "font-regular")}
-                  key={index}
-                  onClick={() => handlePageChange(pageNumber)}
-                  disabled={pageNumber === currentPage || pageNumber === "..."}
-                >
-                  {pageNumber}
-                </button>
+                <a href="#newpage">
+                  <button
+                    className={"text-md mx-2 "+(pageNumber === currentPage ? "font-bold" : "font-regular")}
+                    key={index}
+                    onClick={() => handlePageChange(pageNumber)}
+                    disabled={pageNumber === currentPage || pageNumber === "..."}
+                  >
+                    {pageNumber}
+                  </button>
+                </a>
               ))}
             </div>
           </div>
