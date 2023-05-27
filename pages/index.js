@@ -5,9 +5,10 @@ import SelectMenu from "@/components/sidebar/SelectMenu";
 import VersionLine from "@/components/sidebar/VersionLine";
 
 import { FaDownload } from "react-icons/fa";
+import { FcClearFilters } from "react-icons/fc";
 import { FiSearch } from "react-icons/fi";
 import { MdArrowDropDown, MdRssFeed } from "react-icons/md";
-import { TbBellFilled, TbBraces, TbPlus } from "react-icons/tb";
+import { TbBellFilled, TbBraces } from "react-icons/tb";
 
 import Review from "@/components/Review";
 import { useState } from "react";
@@ -18,6 +19,10 @@ const itemsPerPage = 10;
 const maxPaginationNumbers = 5;
 
 const index = () => {
+  const [filteredData, setFilteredData] = useState(ApplicationsData);
+  const [isFilterApplied, setIsFilterApplied] = useState(false);
+  const [filtersApplied, setFiltersApplied] = useState([]);
+
   const [product, setProduct] = useState("My App +2");
   const productsList = ["My App +1", "My App +2", "My App +3", "My App +4"];
 
@@ -45,12 +50,12 @@ const index = () => {
   const [currentPage, setCurrentPage] = useState(1);
 
   // Calculate the total number of pages
-  const totalPages = Math.ceil(ApplicationsData.length / itemsPerPage);
+  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
   // Slice the data for the current page
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  const paginatedData = ApplicationsData.slice(startIndex, endIndex);
+  const paginatedData = filteredData.slice(startIndex, endIndex);
 
   // Update the current page
   const handlePageChange = (pageNumber) => {
@@ -102,17 +107,28 @@ const index = () => {
 
   // Rating Distribution for Rating filter
   const ratingDistribution = [0, 0, 0, 0, 0];
-  ratingDistribution[0] = ApplicationsData.filter((review) => review.rating === '5').length;
-  ratingDistribution[1] = ApplicationsData.filter((review) => review.rating === '4').length;
-  ratingDistribution[2] = ApplicationsData.filter((review) => review.rating === '3').length;
-  ratingDistribution[3] = ApplicationsData.filter((review) => review.rating === '2').length;
-  ratingDistribution[4] = ApplicationsData.filter((review) => review.rating === '1').length;
+  ratingDistribution[0] = filteredData.filter(
+    (review) => review.rating === "1"
+  ).length;
+  ratingDistribution[1] = filteredData.filter(
+    (review) => review.rating === "2"
+  ).length;
+  ratingDistribution[2] = filteredData.filter(
+    (review) => review.rating === "3"
+  ).length;
+  ratingDistribution[3] = filteredData.filter(
+    (review) => review.rating === "4"
+  ).length;
+  ratingDistribution[4] = filteredData.filter(
+    (review) => review.rating === "5"
+  ).length;
 
   // Version Distribution for Version filter
   const versionDistribution = {};
-  ApplicationsData.forEach((review) => {
-    if (Object.keys(versionDistribution).includes(review.version)){
-      versionDistribution[review.version] = versionDistribution[review.version] + 1;
+  filteredData.forEach((review) => {
+    if (Object.keys(versionDistribution).includes(review.version)) {
+      versionDistribution[review.version] =
+        versionDistribution[review.version] + 1;
     } else {
       versionDistribution[review.version] = 1;
     }
@@ -120,13 +136,23 @@ const index = () => {
 
   // Country Distribution for Country filter
   const countryDistribution = {};
-  ApplicationsData.forEach((review) => {
-    if (Object.keys(countryDistribution).includes(review.countryName)){
-      countryDistribution[review.countryName] = countryDistribution[review.countryName] + 1;
+  filteredData.forEach((review) => {
+    if (Object.keys(countryDistribution).includes(review.countryName)) {
+      countryDistribution[review.countryName] =
+        countryDistribution[review.countryName] + 1;
     } else {
       countryDistribution[review.countryName] = 1;
     }
   });
+
+  const filterByArgument = (argument, value) => {
+    const filteredList = filteredData.filter(
+      (review) => review[argument] === value
+    );
+    setFilteredData(filteredList);
+    setIsFilterApplied(true);
+    setFiltersApplied([...filtersApplied, argument]);
+  };
 
   return (
     <div className="mx-auto">
@@ -204,11 +230,28 @@ const index = () => {
                   (openRatingFilter ? "flex" : "hidden")
                 }
               >
-                <RatingLine rating={5} raters={ratingDistribution[4]} totalRaters={ApplicationsData.length} />
-                <RatingLine rating={4} raters={ratingDistribution[3]} totalRaters={ApplicationsData.length} />
-                <RatingLine rating={3} raters={ratingDistribution[2]} totalRaters={ApplicationsData.length} />
-                <RatingLine rating={2} raters={ratingDistribution[1]} totalRaters={ApplicationsData.length} />
-                <RatingLine rating={1} raters={ratingDistribution[0]} totalRaters={ApplicationsData.length} />
+                {["5", "4", "3", "2", "1"].map((rating) => {
+                  return (
+                    ratingDistribution[parseInt(rating) - 1] !== 0 && (
+                      <div
+                        key={rating}
+                        className={
+                          "cursor-pointer py-px px-1 rounded " +
+                          (filtersApplied.includes("rating")
+                            ? "bg-zinc-300"
+                            : "hover:bg-zinc-300")
+                        }
+                        onClick={() => filterByArgument("rating", rating)}
+                      >
+                        <RatingLine
+                          rating={rating}
+                          raters={ratingDistribution[rating - 1]}
+                          totalRaters={filteredData.length}
+                        />
+                      </div>
+                    )
+                  );
+                })}
               </div>
             </div>
 
@@ -243,8 +286,22 @@ const index = () => {
               >
                 {Object.keys(versionDistribution).map((version) => {
                   return (
-                    <VersionLine version={version} occurence={versionDistribution[version]} />
-                  )
+                    <div
+                      key={version}
+                      className={
+                        "cursor-pointer py-px px-1 rounded " +
+                        (filtersApplied.includes("version")
+                          ? "bg-zinc-300"
+                          : "hover:bg-zinc-300")
+                      }
+                      onClick={() => filterByArgument("version", version)}
+                    >
+                      <VersionLine
+                        version={version}
+                        occurence={versionDistribution[version]}
+                      />
+                    </div>
+                  );
                 })}
               </div>
             </div>
@@ -279,18 +336,45 @@ const index = () => {
               >
                 {Object.keys(countryDistribution).map((country) => {
                   return (
-                    <CountryLine country={country} occurence={countryDistribution[country]} />
-                  )
+                    <div
+                      key={country}
+                      className={
+                        "cursor-pointer py-px px-1 rounded " +
+                        (filtersApplied.includes("countryName")
+                          ? "bg-zinc-300"
+                          : "hover:bg-zinc-300")
+                      }
+                      onClick={() => filterByArgument("countryName", country)}
+                    >
+                      <CountryLine
+                        country={country}
+                        occurence={countryDistribution[country]}
+                      />
+                    </div>
+                  );
                 })}
               </div>
             </div>
           </div>
+          {isFilterApplied && (
+            <button
+              onClick={() => {
+                setIsFilterApplied(false);
+                setFiltersApplied([]);
+                setFilteredData(ApplicationsData);
+              }}
+              className="flex justify-center items-center gap-2 bg-gray-100 border border-zinc-300 rounded-md py-1 px-2"
+            >
+              <FcClearFilters />
+              <b className="font-bold text-md">Clear Filters</b>
+            </button>
+          )}
         </div>
         <div id="newpage" className="absolute right-0 flex-2 w-9/12 h-screen">
           <div className="my-8 mx-3 flex flex-col justify-center items-center">
             <div className="flex justify-between items-center w-full mb-6">
               <p className="text-md font-semibold">
-                Viewing {startIndex + 1}-{endIndex} of {ApplicationsData.length}{" "}
+                Viewing {startIndex + 1}-{endIndex} of {filteredData.length}{" "}
                 Reviews
               </p>
               <div className="flex justify-center items-center gap-4 mr-4">
@@ -313,19 +397,26 @@ const index = () => {
             {/* Reviews */}
             <div className="flex flex-col justify-start items-stretch w-full gap-4">
               {paginatedData.map((review) => {
-                return <Review review={review} />;
+                return <Review key={review.id} review={review} />;
               })}
             </div>
 
             {/* Pagination */}
             <div className="flex justify-center items-center my-2">
               {generatePaginationNumbers().map((pageNumber, index) => (
-                <a href="#newpage">
+                <a key={pageNumber} href="#newpage">
                   <button
-                    className={"text-md mx-2 "+(pageNumber === currentPage ? "font-bold" : "font-regular")}
+                    className={
+                      "text-md mx-2 " +
+                      (pageNumber === currentPage
+                        ? "font-bold"
+                        : "font-regular")
+                    }
                     key={index}
                     onClick={() => handlePageChange(pageNumber)}
-                    disabled={pageNumber === currentPage || pageNumber === "..."}
+                    disabled={
+                      pageNumber === currentPage || pageNumber === "..."
+                    }
                   >
                     {pageNumber}
                   </button>

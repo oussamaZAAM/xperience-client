@@ -9,7 +9,7 @@ const Stars = ({rating, size}) => {
       <AiFillStar size={size === "big" ? 24 : 20} color={rating >= 2 ? COLORS.golden : COLORS.gray} />
       <AiFillStar size={size === "big" ? 24 : 20} color={rating >= 3 ? COLORS.golden : COLORS.gray} />
       <AiFillStar size={size === "big" ? 24 : 20} color={rating >= 4 ? COLORS.golden : COLORS.gray} />
-      <AiFillStar size={size === "big" ? 24 : 20} color={rating === 5 ? COLORS.golden : COLORS.gray}/>
+      <AiFillStar size={size === "big" ? 24 : 20} color={rating == 5 ? COLORS.golden : COLORS.gray}/>
     </div>
   );
 };
