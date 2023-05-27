@@ -14,6 +14,8 @@ import { useState } from "react";
 import { HiPlusSm } from "react-icons/hi";
 
 import { ApplicationsData } from "../public/review";
+const itemsPerPage = 10;
+const maxPaginationNumbers = 5;
 
 const index = () => {
   const [product, setProduct] = useState("My App +2");
@@ -38,6 +40,64 @@ const index = () => {
   const [openVersionFilter, setOpenVersionFilter] = useState(true);
 
   const [openCountryFilter, setOpenCountryFilter] = useState(true);
+
+  // ------------------------ Pagination Logic ------------------------
+  const [currentPage, setCurrentPage] = useState(1);
+
+  // Calculate the total number of pages
+  const totalPages = Math.ceil(ApplicationsData.length / itemsPerPage);
+
+  // Slice the data for the current page
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const paginatedData = ApplicationsData.slice(startIndex, endIndex);
+
+  // Update the current page
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  // Generate an array of pagination numbers
+  const generatePaginationNumbers = () => {
+    if (totalPages <= maxPaginationNumbers) {
+      return Array.from({ length: totalPages }, (_, index) => index + 1);
+    }
+
+    const currentPageIndex = currentPage - 1;
+    const halfMaxPagination = Math.floor(maxPaginationNumbers / 2);
+    let startPageIndex = currentPageIndex - halfMaxPagination;
+    let endPageIndex = currentPageIndex + halfMaxPagination;
+
+    if (startPageIndex < 0) {
+      endPageIndex += Math.abs(startPageIndex);
+      startPageIndex = 0;
+    } else if (endPageIndex >= totalPages) {
+      startPageIndex -= endPageIndex - (totalPages - 1);
+      endPageIndex = totalPages - 1;
+    }
+
+    const paginationNumbers = [];
+
+    if (startPageIndex > 0) {
+      paginationNumbers.push(1);
+      if (startPageIndex > 1) {
+        paginationNumbers.push("...");
+      }
+    }
+
+    for (let i = startPageIndex; i <= endPageIndex; i++) {
+      paginationNumbers.push(i + 1);
+    }
+
+    if (endPageIndex < totalPages - 1) {
+      if (endPageIndex < totalPages - 2) {
+        paginationNumbers.push("...");
+      }
+      paginationNumbers.push(totalPages);
+    }
+
+    return paginationNumbers;
+  };
 
   return (
     <div className="mx-auto">
@@ -71,7 +131,7 @@ const index = () => {
       </div>
       <div className="mt-24 flex items-start">
         {/* Side bar Menu */}
-        <div className="fixed h-full w-3/12 flex-1 flex flex-col items-center justify-start p-3 gap-2 my-2 border-r-2 border-zinc-300">
+        <div className="fixed h-full w-3/12 flex-1 flex flex-col items-center justify-start p-3 gap-2 my-4 border-r-2 border-zinc-300">
           <div className="flex flex-col items-stretch justify-center gap-2 w-11/12">
             {/* Search bar */}
             <div className="flex items-center justify-start rounded-md border-2 border-zinc-300 py-2 px-3 textinput">
@@ -90,7 +150,7 @@ const index = () => {
             />
           </div>
 
-          <div className="flex flex-col items-start justify-center w-full ml-4 my-4 gap-5">
+          <div className="flex flex-col items-start justify-center w-full ml-4 my-3 gap-4">
             {/* Filter by Rating  */}
             <div className="flex flex-col justify-start items-start gap-2 w-full">
               <div
@@ -196,14 +256,12 @@ const index = () => {
             </div>
           </div>
         </div>
-        <div
-          style={{ overflowY: "scroll", overflowX: "hidden" }}
-          className="absolute right-0 flex-2 w-9/12 h-screen"
-        >
+        <div id="newpage" className="absolute right-0 flex-2 w-9/12 h-screen">
           <div className="my-8 mx-3 flex flex-col justify-center items-center">
             <div className="flex justify-between items-center w-full mb-6">
               <p className="text-md font-semibold">
-                Viewing 1-10 of 157 Reviews
+                Viewing {startIndex + 1}-{endIndex} of {ApplicationsData.length}{" "}
+                Reviews
               </p>
               <div className="flex justify-center items-center gap-4 mr-4">
                 {/* Create Alert */}
@@ -222,11 +280,21 @@ const index = () => {
               </div>
             </div>
             <div className="flex flex-col justify-start items-stretch w-full gap-4">
-              {ApplicationsData.map((review) => {
-                return (
-                  <Review review={review} />
-                )
+              {paginatedData.map((review) => {
+                return <Review review={review} />;
               })}
+            </div>
+            <div className="flex justify-center items-center my-2">
+              {generatePaginationNumbers().map((pageNumber, index) => (
+                <button
+                  className={"text-md mx-2 "+(pageNumber === currentPage ? "font-bold" : "font-regular")}
+                  key={index}
+                  onClick={() => handlePageChange(pageNumber)}
+                  disabled={pageNumber === currentPage || pageNumber === "..."}
+                >
+                  {pageNumber}
+                </button>
+              ))}
             </div>
           </div>
         </div>
