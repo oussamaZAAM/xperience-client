@@ -129,27 +129,28 @@ const index = () => {
           className="absolute right-0 flex-2 w-9/12 h-screen"
         >
           <div className="my-8 mx-3 flex flex-col justify-center items-center">
-            <div className="flex justify-between items-center w-full mr-4">
+            <div className="flex justify-between items-center w-full mr-4 mb-6">
               <p className="text-md font-semibold">
                 Viewing 1-10 of 157 Reviews
               </p>
-              <div className="flex justify-center items-center">
+              <div className="flex justify-center items-center gap-4">
                 {/* Create Alert */}
-                <div className="flex justify-center items-center border-2 border-zinc-300 rounded-md py-1 px-3 gap-1">
+                <div className="flex justify-center items-center border-2 border-zinc-300 rounded-md py-1 px-3 gap-2">
                   <TbBellFilled size={18} />
                   <p className="text-sm font-semibold">Create Alert</p>
                   <MdArrowDropDown size={20} />
                 </div>
 
                 {/* Icons */}
-                <div className="flex justify-center items-center border-2 border-zinc-300 rounded-md py-1 px-3 gap-1">
-                  <MdRssFeed size={18} />
-                  <TbBraces size={18} />
-                  <FaDownload size={18} />
+                <div className="flex justify-center items-center border-2 border-zinc-300 rounded-md py-1 px-3 gap-3">
+                  <MdRssFeed size={20} />
+                  <TbBraces size={20} />
+                  <FaDownload size={16} />
                 </div>
               </div>
             </div>
-            <div className="flex flex-col justify-start items-stretch">
+            <div className="flex flex-col justify-start items-stretch w-full gap-4">
+              <Review />
               <Review />
             </div>
           </div>
