@@ -69,7 +69,7 @@ const index = () => {
       </div>
       <div className="mt-24 flex items-start">
         {/* Side bar Menu */}
-        <div className="fixed w-3/12 flex-1 flex flex-col items-center justify-start p-3 gap-2 my-2 border-r-2 border-zinc-300">
+        <div className="fixed h-full w-3/12 flex-1 flex flex-col items-center justify-start p-3 gap-2 my-2 border-r-2 border-zinc-300">
           <div className="flex flex-col items-stretch justify-center gap-2 w-11/12">
             {/* Search bar */}
             <div className="flex items-center justify-start rounded-md border-2 border-zinc-300 py-2 px-3 textinput">
