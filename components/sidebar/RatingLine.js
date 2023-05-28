@@ -9,7 +9,7 @@ const RatingLine = ({rating, raters, totalRaters}) => {
       <div className="flex justify-start items-center h-5 w-full">
         <div
           style={{ width: (raters * 100) / totalRaters + "%" }}
-          className="justify-items-start rounded bg-zinc-300 h-5"
+          className="justify-items-start rounded bg-zinc-400 h-5"
         ></div>
       </div>
       {/* Rating Number  */}

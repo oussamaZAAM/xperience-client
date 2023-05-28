@@ -8,7 +8,7 @@ const CountryLine = ({ country, occurence }) => {
   useEffect(() => {
     fetchCountry(country)
       .then((flag) => setFlag(flag))
-      .catch((error) => console.log(error));
+      .catch((error) => setFlag(missing_flag));
   }, []);
 
   return (

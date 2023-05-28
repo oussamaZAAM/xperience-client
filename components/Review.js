@@ -25,8 +25,10 @@ const Review = ({ review }) => {
   const [flag, setFlag] = useState(missing_flag);
   useEffect(() => {
     fetchCountry(review.countryName)
-      .then((flag) => setFlag(flag))
-      .catch((error) => console.log(error));
+      .then((flag) => {
+        setFlag(flag)
+      })
+      .catch((error) => setFlag(missing_flag));
   }, []);
   return (
     <div className="flex flex-col justify-start items-center shadow-xl rounded-lg bg-white w-full p-5 gap-6">

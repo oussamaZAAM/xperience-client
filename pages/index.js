@@ -460,10 +460,10 @@ const index = () => {
             {/* Pagination */}
             <div className="flex justify-center items-center my-2">
               {generatePaginationNumbers().map((pageNumber, index) => (
-                <a key={pageNumber} href="#newpage">
+                <a className="flex justify-center items-center mx-2" key={pageNumber} href="#newpage">
                   <button
                     className={
-                      "text-md mx-2 " +
+                      "text-md " +
                       (pageNumber === currentPage
                         ? "font-bold"
                         : "font-regular")
