@@ -32,13 +32,18 @@ const index = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchedData, setSearchedData] = useState(ApplicationsData);
 
+  // Filter By App
+  const [filteredDataByApp, setFilteredDataByApp] = useState(ApplicationsData);
+
   // Common Data (between searched data and filtered data)
-  const commonData = filteredData.filter(review => searchedData.includes(review));
+  const commonData = filteredData.filter((review) =>
+    searchedData.includes(review) && filteredDataByApp.includes(review)
+  );
 
   const handleInputChange = (event) => {
     const searchTerm = event.target.value;
     setSearchTerm(searchTerm);
-    setSearchedData(prev => {
+    setSearchedData((prev) => {
       const newFilteredData = ApplicationsData.filter(
         (review) =>
           review.reviewHeading
@@ -50,8 +55,13 @@ const index = () => {
     });
   };
 
-  const [product, setProduct] = useState("My App +2");
-  const productsList = ["My App +1", "My App +2", "My App +3", "My App +4"];
+  const [product, setProduct] = useState("All Apps");
+  const productsList = [];
+  ApplicationsData.forEach((review) => {
+    if (!productsList.includes(review.appStoreName)) {
+      productsList.push(review.appStoreName);
+    }
+  });
 
   const [sortingBy, setSortingBy] = useState("Newest First");
   const sortingBysList = ["Newest First", "Oldest First"];
@@ -172,6 +182,13 @@ const index = () => {
     }
   });
 
+  const filterByApp = (value) => {
+    const filteredListByApp = ApplicationsData.filter(
+      (review) => review.appStoreName === value
+    );
+    setFilteredDataByApp(filteredListByApp);
+  };
+
   const filterByArgument = (argument, value) => {
     const filteredList = filteredData.filter(
       (review) => review[argument] === value
@@ -207,6 +224,7 @@ const index = () => {
             text={product}
             list={productsList}
             changingAction={setProduct}
+            filterByApp={filterByApp}
           />
         </div>
         <div className="flex justify-center items-center gap-6 mx-10">
@@ -460,7 +478,11 @@ const index = () => {
             {/* Pagination */}
             <div className="flex justify-center items-center my-2">
               {generatePaginationNumbers().map((pageNumber, index) => (
-                <a className="flex justify-center items-center mx-2" key={pageNumber} href="#newpage">
+                <a
+                  className="flex justify-center items-center mx-2"
+                  key={pageNumber}
+                  href="#newpage"
+                >
                   <button
                     className={
                       "text-md " +
