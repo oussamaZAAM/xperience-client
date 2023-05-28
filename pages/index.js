@@ -48,7 +48,7 @@ const index = () => {
   const [filteredDataByTime, setFilteredDataByTime] =
     useState(ApplicationsData);
 
-  // Common Data (between searched data and filtered data)
+    // Common Data (between searched data and filtered data)
   const commonData = filteredData.filter(
     (review) =>
       searchedData.includes(review) &&
@@ -59,15 +59,15 @@ const index = () => {
   // ------------------------ Pagination Logic ------------------------
   const [currentPage, setCurrentPage] = useState(1);
 
-  // Calculate the total number of pages
+    // Calculate the total number of pages
   const totalPages = Math.ceil(commonData.length / itemsPerPage);
 
-  // Slice the data for the current page
+    // Slice the data for the current page
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const paginatedData = commonData.slice(startIndex, endIndex);
 
-  // Update the current page
+    // Update the current page
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
@@ -138,7 +138,7 @@ const index = () => {
   ];
 
   // ------------------------- Filters Distribution -----------------------------
-  // Rating Distribution for Rating filter
+    // Rating Distribution for Rating filter
   const ratingDistribution = [0, 0, 0, 0, 0];
   ratingDistribution[0] = commonData.filter(
     (review) => review.rating === "1"
@@ -156,7 +156,7 @@ const index = () => {
     (review) => review.rating === "5"
   ).length;
 
-  // Version Distribution for Version filter
+    // Version Distribution for Version filter
   const versionDistribution = {};
   commonData.forEach((review) => {
     if (Object.keys(versionDistribution).includes(review.version)) {
@@ -167,7 +167,7 @@ const index = () => {
     }
   });
 
-  // Country Distribution for Country filter
+    // Country Distribution for Country filter
   const countryDistribution = {};
   commonData.forEach((review) => {
     if (Object.keys(countryDistribution).includes(review.countryName)) {
