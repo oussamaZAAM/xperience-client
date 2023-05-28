@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { SlArrowDown } from "react-icons/sl";
 import { TfiLayoutGrid3 } from "react-icons/tfi";
 

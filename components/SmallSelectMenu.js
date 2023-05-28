@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { HiOutlineSelector } from "react-icons/hi";
 
 const SmallSelectMenu = ({ text, list, changingAction }) => {

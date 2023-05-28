@@ -1,6 +1,4 @@
-import React from "react";
-
-const VersionLine = ({version, occurence}) => {
+const VersionLine = ({ version, occurence }) => {
   return (
     <div className="flex justify-between items-center">
       <p className="font-medium text-sm tracking-widest">{version}</p>

@@ -14,10 +14,10 @@ import Review from "@/components/Review";
 import { useEffect, useState } from "react";
 import { HiPlusSm } from "react-icons/hi";
 
-import { ApplicationsData } from "../public/review";
 import { stringToDate } from "@/components/generalMethods";
-import Image from "next/image";
 import Head from "next/head";
+import Image from "next/image";
+import { ApplicationsData } from "../public/review";
 const itemsPerPage = 10;
 const maxPaginationNumbers = 5;
 

@@ -1,6 +1,6 @@
 import Stars from "../Stars";
 
-const RatingLine = ({rating, raters, totalRaters}) => {
+const RatingLine = ({ rating, raters, totalRaters }) => {
   return (
     <div className="flex justify-between items-center h-full w-full gap-5">
       {/* Rating  */}

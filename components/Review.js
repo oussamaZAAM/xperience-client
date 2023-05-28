@@ -26,7 +26,7 @@ const Review = ({ review }) => {
   useEffect(() => {
     fetchCountry(review.countryName)
       .then((flag) => {
-        setFlag(flag)
+        setFlag(flag);
       })
       .catch((error) => setFlag(missing_flag));
   }, []);
@@ -63,7 +63,9 @@ const Review = ({ review }) => {
           <p className="font-semibold text-sm">By {reviewUserName}</p>
 
           {/* Timestamp */}
-          <p className="font-semibold text-sm">{calculateTimePassed(reviewDate)}</p>
+          <p className="font-semibold text-sm">
+            {calculateTimePassed(reviewDate)}
+          </p>
 
           {/* Version */}
           <p className="font-semibold text-sm">{version}</p>

@@ -1,8 +1,5 @@
 export function stringToDate(string) {
-  const isoDateString = string.replace(
-    /(\d{2}) (\w{3}) (\d{4})/,
-    "$2 $1 $3"
-  );
+  const isoDateString = string.replace(/(\d{2}) (\w{3}) (\d{4})/, "$2 $1 $3");
   const dateObject = new Date(isoDateString);
   return dateObject;
 }
@@ -23,21 +20,21 @@ export function calculateTimePassed(dateString) {
 
   if (timeDiff < millisecondsInMinute) {
     const secondsPassed = Math.floor(timeDiff / millisecondsInSecond);
-    return `${secondsPassed} second${secondsPassed !== 1 ? 's' : ''} ago`;
+    return `${secondsPassed} second${secondsPassed !== 1 ? "s" : ""} ago`;
   } else if (timeDiff < millisecondsInHour) {
     const minutesPassed = Math.floor(timeDiff / millisecondsInMinute);
-    return `${minutesPassed} minute${minutesPassed !== 1 ? 's' : ''} ago`;
+    return `${minutesPassed} minute${minutesPassed !== 1 ? "s" : ""} ago`;
   } else if (timeDiff < millisecondsInDay) {
     const hoursPassed = Math.floor(timeDiff / millisecondsInHour);
-    return `${hoursPassed} hour${hoursPassed !== 1 ? 's' : ''} ago`;
+    return `${hoursPassed} hour${hoursPassed !== 1 ? "s" : ""} ago`;
   } else if (timeDiff < millisecondsInMonth) {
     const daysPassed = Math.floor(timeDiff / millisecondsInDay);
-    return `${daysPassed} day${daysPassed !== 1 ? 's' : ''} ago`;
+    return `${daysPassed} day${daysPassed !== 1 ? "s" : ""} ago`;
   } else if (timeDiff < millisecondsInYear) {
     const monthsPassed = Math.floor(timeDiff / millisecondsInMonth);
-    return `${monthsPassed} month${monthsPassed !== 1 ? 's' : ''} ago`;
+    return `${monthsPassed} month${monthsPassed !== 1 ? "s" : ""} ago`;
   } else {
     const yearsPassed = Math.floor(timeDiff / millisecondsInYear);
-    return `${yearsPassed} year${yearsPassed !== 1 ? 's' : ''} ago`;
+    return `${yearsPassed} year${yearsPassed !== 1 ? "s" : ""} ago`;
   }
 }
