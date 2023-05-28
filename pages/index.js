@@ -20,11 +20,7 @@ const itemsPerPage = 10;
 const maxPaginationNumbers = 5;
 
 const index = () => {
-  const [filteredData, setFilteredData] = useState(
-    ApplicationsData.sort(
-      (a, b) => stringToDate(b.reviewDate) - stringToDate(a.reviewDate) // Set it to "Newest First" at first
-    )
-  );
+  const [filteredData, setFilteredData] = useState(ApplicationsData);
   const [isFilterApplied, setIsFilterApplied] = useState(false);
   const [filtersApplied, setFiltersApplied] = useState([]);
 
@@ -208,15 +204,17 @@ const index = () => {
 
   // Sorting Algorithms
   useEffect(() => {
-    if (sortingBy == "Newest First") {
+    if (sortingBy === "Newest First") {
       setFilteredData((prev) => {
-        return prev.sort(
+        const newData = [...prev]; // Create a new copy of the array
+        return newData.sort(
           (a, b) => stringToDate(b.reviewDate) - stringToDate(a.reviewDate)
         );
       });
-    } else if (sortingBy == "Oldest First") {
+    } else if (sortingBy === "Oldest First") {
       setFilteredData((prev) => {
-        return prev.sort(
+        const newData = [...prev]; // Create a new copy of the array
+        return newData.sort(
           (a, b) => stringToDate(a.reviewDate) - stringToDate(b.reviewDate)
         );
       });
@@ -265,12 +263,16 @@ const index = () => {
                 <input
                   type="text"
                   value={searchTerm}
-                  onChange={(e)=>handleInputChange(e.target.value)}
+                  onChange={(e) => handleInputChange(e.target.value)}
                   className="indent-2 h-max w-full focus:outline-none font-bold"
                   placeholder="search"
                 />
               </div>
-              <FiDelete className="cursor-pointer" onClick={() => handleInputChange('')} size={20} />
+              <FiDelete
+                className="cursor-pointer"
+                onClick={() => handleInputChange("")}
+                size={20}
+              />
             </div>
             {/* Filter by Date */}
             <SelectMenu
