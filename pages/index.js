@@ -6,7 +6,7 @@ import VersionLine from "@/components/sidebar/VersionLine";
 
 import { FaDownload } from "react-icons/fa";
 import { FcClearFilters } from "react-icons/fc";
-import { FiSearch } from "react-icons/fi";
+import { FiDelete, FiSearch } from "react-icons/fi";
 import { MdArrowDropDown, MdRssFeed } from "react-icons/md";
 import { TbBellFilled, TbBraces } from "react-icons/tb";
 
@@ -41,8 +41,8 @@ const index = () => {
       searchedData.includes(review) && filteredDataByApp.includes(review)
   );
 
-  const handleInputChange = (event) => {
-    const searchTerm = event.target.value;
+  const handleInputChange = (value) => {
+    const searchTerm = value;
     setSearchTerm(searchTerm);
     setSearchedData((prev) => {
       const newFilteredData = ApplicationsData.filter(
@@ -259,15 +259,18 @@ const index = () => {
         <div className="fixed h-full w-3/12 flex-1 flex flex-col items-center justify-start p-3 gap-2 my-4 border-r-2 border-zinc-300">
           <div className="flex flex-col items-stretch justify-center gap-2 w-11/12">
             {/* Search bar */}
-            <div className="flex items-center justify-start rounded-md border-2 border-zinc-300 py-2 px-3 textinput">
-              <FiSearch size={24} />
-              <input
-                type="text"
-                value={searchTerm}
-                onChange={handleInputChange}
-                className="indent-2 h-max w-full focus:outline-none"
-                placeholder="search"
-              />
+            <div className="flex items-center justify-between rounded-md border-2 border-zinc-300 py-2 px-3 textinput">
+              <div className="flex justify-start items-center">
+                <FiSearch size={24} />
+                <input
+                  type="text"
+                  value={searchTerm}
+                  onChange={(e)=>handleInputChange(e.target.value)}
+                  className="indent-2 h-max w-full focus:outline-none font-bold"
+                  placeholder="search"
+                />
+              </div>
+              <FiDelete className="cursor-pointer" onClick={() => handleInputChange('')} size={20} />
             </div>
             {/* Filter by Date */}
             <SelectMenu
