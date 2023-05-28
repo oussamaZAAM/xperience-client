@@ -20,22 +20,9 @@ const itemsPerPage = 10;
 const maxPaginationNumbers = 5;
 
 const index = () => {
-  const [filteredData, setFilteredData] = useState(ApplicationsData);
-  const [isFilterApplied, setIsFilterApplied] = useState(false);
-  const [filtersApplied, setFiltersApplied] = useState([]);
-
-  // Search bar
+  // ----------------------------- Search bar -----------------------------
   const [searchTerm, setSearchTerm] = useState("");
   const [searchedData, setSearchedData] = useState(ApplicationsData);
-
-  // Filter By App
-  const [filteredDataByApp, setFilteredDataByApp] = useState(ApplicationsData);
-
-  // Common Data (between searched data and filtered data)
-  const commonData = filteredData.filter(
-    (review) =>
-      searchedData.includes(review) && filteredDataByApp.includes(review)
-  );
 
   const handleInputChange = (value) => {
     const searchTerm = value;
@@ -52,33 +39,21 @@ const index = () => {
     });
   };
 
-  const [product, setProduct] = useState("All Apps");
-  const productsList = ["All Apps"];
-  ApplicationsData.forEach((review) => {
-    if (!productsList.includes(review.appStoreName)) {
-      productsList.push(review.appStoreName);
-    }
-  });
+  // ------------------------ Filtered Data --------------------------------
+  const [filteredData, setFilteredData] = useState(ApplicationsData);
+  const [isFilterApplied, setIsFilterApplied] = useState(false);
+  const [filtersApplied, setFiltersApplied] = useState([]);
+  const [filteredDataByApp, setFilteredDataByApp] = useState(ApplicationsData);
+  const [filteredDataByTime, setFilteredDataByTime] =
+    useState(ApplicationsData);
 
-  const [sortingBy, setSortingBy] = useState("Newest First");
-  const sortingBysList = ["Newest First", "Oldest First"];
-
-  const [translation, setTranslation] = useState("English");
-  const translationList = ["English", "French", "Arabic", "Japanese"];
-
-  const [reviewDate, setReviewDate] = useState("all time");
-  const reviewDatesList = [
-    "all time",
-    "1 year ago",
-    "1 month ago",
-    "1 day ago",
-  ];
-
-  const [openRatingFilter, setOpenRatingFilter] = useState(true);
-
-  const [openVersionFilter, setOpenVersionFilter] = useState(true);
-
-  const [openCountryFilter, setOpenCountryFilter] = useState(true);
+  // Common Data (between searched data and filtered data)
+  const commonData = filteredData.filter(
+    (review) =>
+      searchedData.includes(review) &&
+      filteredDataByApp.includes(review) &&
+      filteredDataByTime.includes(review)
+  );
 
   // ------------------------ Pagination Logic ------------------------
   const [currentPage, setCurrentPage] = useState(1);
@@ -137,8 +112,31 @@ const index = () => {
 
     return paginationNumbers;
   };
-  // --------------------------------------------------------------------
 
+  // ----------------------------- Select Menus -----------------------------
+  const [product, setProduct] = useState("All Apps");
+  const productsList = ["All Apps"];
+  ApplicationsData.forEach((review) => {
+    if (!productsList.includes(review.appStoreName)) {
+      productsList.push(review.appStoreName);
+    }
+  });
+
+  const [sortingBy, setSortingBy] = useState("Newest First");
+  const sortingBysList = ["Newest First", "Oldest First"];
+
+  const [translation, setTranslation] = useState("English");
+  const translationList = ["English", "French", "Arabic", "Japanese"];
+
+  const [reviewDate, setReviewDate] = useState("all time");
+  const reviewDatesList = [
+    "all time",
+    "1 year ago",
+    "1 month ago",
+    "1 day ago",
+  ];
+
+  // ------------------------- Filters Distribution -----------------------------
   // Rating Distribution for Rating filter
   const ratingDistribution = [0, 0, 0, 0, 0];
   ratingDistribution[0] = commonData.filter(
@@ -179,6 +177,11 @@ const index = () => {
     }
   });
 
+  // --------------------------- Filters ----------------------------
+  const [openRatingFilter, setOpenRatingFilter] = useState(true);
+  const [openVersionFilter, setOpenVersionFilter] = useState(true);
+  const [openCountryFilter, setOpenCountryFilter] = useState(true);
+
   const filterByApp = (value) => {
     var filteredListByApp;
     if (value === "All Apps") {
@@ -191,7 +194,33 @@ const index = () => {
     }
   };
 
-  const filterByTime = (value) => {};
+  const filterByTime = (value) => {
+    var filteredListByApp;
+
+    const currentDate = new Date();
+    const millisecondsInDay = 1000 * 60 * 60 * 24;
+    const millisecondsInMonth = millisecondsInDay * 30;
+    const millisecondsInYear = millisecondsInDay * 365;
+
+    if (value === "all time") {
+      setFilteredDataByTime(ApplicationsData);
+    } else if (value === "1 year ago") {
+      filteredListByApp = ApplicationsData.filter(
+        (review) => currentDate.getTime() - stringToDate(review.reviewDate).getTime() <= millisecondsInYear
+      );
+      setFilteredDataByTime(filteredListByApp);
+    } else if (value === "1 month ago") {
+      filteredListByApp = ApplicationsData.filter(
+        (review) => currentDate.getTime() - stringToDate(review.reviewDate).getTime() <= millisecondsInMonth
+      );
+      setFilteredDataByTime(filteredListByApp);
+    } else if (value === "1 day ago") {
+      filteredListByApp = ApplicationsData.filter(
+        (review) => currentDate.getTime() - stringToDate(review.reviewDate).getTime() <= 6 * millisecondsInDay
+      );
+      setFilteredDataByTime(filteredListByApp);
+    }
+  };
 
   const filterByArgument = (argument, value) => {
     const filteredList = filteredData.filter(
@@ -202,7 +231,7 @@ const index = () => {
     setFiltersApplied([...filtersApplied, argument]);
   };
 
-  // Sorting Algorithms
+  // --------------------------- Sorting Algorithms ---------------------------
   useEffect(() => {
     if (sortingBy === "Newest First") {
       setFilteredData((prev) => {
