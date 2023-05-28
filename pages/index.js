@@ -36,8 +36,9 @@ const index = () => {
   const [filteredDataByApp, setFilteredDataByApp] = useState(ApplicationsData);
 
   // Common Data (between searched data and filtered data)
-  const commonData = filteredData.filter((review) =>
-    searchedData.includes(review) && filteredDataByApp.includes(review)
+  const commonData = filteredData.filter(
+    (review) =>
+      searchedData.includes(review) && filteredDataByApp.includes(review)
   );
 
   const handleInputChange = (event) => {
@@ -56,7 +57,7 @@ const index = () => {
   };
 
   const [product, setProduct] = useState("All Apps");
-  const productsList = [];
+  const productsList = ["All Apps"];
   ApplicationsData.forEach((review) => {
     if (!productsList.includes(review.appStoreName)) {
       productsList.push(review.appStoreName);
@@ -183,11 +184,18 @@ const index = () => {
   });
 
   const filterByApp = (value) => {
-    const filteredListByApp = ApplicationsData.filter(
-      (review) => review.appStoreName === value
-    );
-    setFilteredDataByApp(filteredListByApp);
+    var filteredListByApp;
+    if (value === "All Apps") {
+      setFilteredDataByApp(ApplicationsData);
+    } else {
+      filteredListByApp = ApplicationsData.filter(
+        (review) => review.appStoreName === value
+      );
+      setFilteredDataByApp(filteredListByApp);
+    }
   };
+
+  const filterByTime = (value) => {};
 
   const filterByArgument = (argument, value) => {
     const filteredList = filteredData.filter(
@@ -224,7 +232,7 @@ const index = () => {
             text={product}
             list={productsList}
             changingAction={setProduct}
-            filterByApp={filterByApp}
+            filter={{ action: filterByApp }}
           />
         </div>
         <div className="flex justify-center items-center gap-6 mx-10">
@@ -266,6 +274,7 @@ const index = () => {
               text={reviewDate}
               list={reviewDatesList}
               changingAction={setReviewDate}
+              filter={{ action: filterByTime }}
             />
           </div>
 

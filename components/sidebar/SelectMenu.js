@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { SlArrowDown } from "react-icons/sl";
 import { TfiLayoutGrid3 } from "react-icons/tfi";
 
-const SelectMenu = ({ text, list, changingAction, filterByApp }) => {
+const SelectMenu = ({ text, list, changingAction, filter }) => {
   const [openMenu, setOpenMenu] = useState(false);
   return (
     <div className="relative flex flex-col justify-start items-stretch w-full">
@@ -31,7 +31,7 @@ const SelectMenu = ({ text, list, changingAction, filterByApp }) => {
               onClick={() => {
                 setOpenMenu(false);
                 changingAction(value);
-                filterByApp(value);
+                filter.action(value);
               }}
               className={
                 "bg-white border border-zinc-300 px-2.5 py-1 w-11/12 cursor-pointer hover:bg-zinc-100 " +
